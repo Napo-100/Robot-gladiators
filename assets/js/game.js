@@ -1,15 +1,16 @@
 
 
+var fightOrSkip = function() {
+    //ask user if they'd like to fight or skip using function
+    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT or 'SKIP to choose.");
 
-
-
-var fight = function(enemy) {
-    while(enemy.health > 0 && playerInfo.health > 0) {
-        //ask user if they'd like to fight or run
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT or 'SKIP to choose.");
-
+        if (promptFight === "" || promptFight === null) {
+            window.alert("You need to provide a valid answer! Please try again.");
+            return fightOrSkip();
+        }
+        promptFight = promptFight.toLowerCase();
         //if player choses to skip
-        if (promptFight === "skip" || promptFight === "SKIP") {
+        if (promptFight === "skip") {
         // confirm user wants to skip
         var confirmSkip = window.confirm("Are you sure You'd like to quit?");
         
@@ -18,11 +19,17 @@ var fight = function(enemy) {
             window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
             // subtract money from playerInfo.money for skipping
             playerInfo.money = Math.max(0, playerInfo.money - 10);
-            console.log("playerInfo.money", playerInfo.money); 
-            break;      
-        }
+            return true; 
+        }       
     }
+}
 
+
+var fight = function(enemy) {
+    while(enemy.health > 0 && playerInfo.health > 0) {
+        if(fightOrSkip()) {
+            break;
+        }
 
     // Generate random damage value based on player's attack power
     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
@@ -152,12 +159,15 @@ var randomNumber = function(min, max) {
     return value;
 };
 
-//fucntion to set name
+//function to set name
 var getPlayerName = function() {
     var name = "";
     while (name === "" || name === null) {
-        name = prompt("What is your robot's name?");
+        name = prompt("What is your robot's name?")
     }
+
+    console.log("Your robot's name is " + name);
+    return name;
 }
 
 var playerInfo = {
